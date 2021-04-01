@@ -1,3 +1,14 @@
+resource "azurerm_public_ip" "muzi-pubip" {
+  name                = "muzi-pubip"
+  resource_group_name = azurerm_resource_group.muzi-rg.name
+  location            = azurerm_resource_group.muzi-rg.location
+  allocation_method   = "Dynamic"
+
+  tags = {
+    environment = var.environment
+  }
+}
+
 resource "azurerm_network_interface" "muzi-nic" {
   name                = "muzi-nic"
   resource_group_name = azurerm_resource_group.muzi-rg.name
@@ -7,6 +18,7 @@ resource "azurerm_network_interface" "muzi-nic" {
     name                          = "muzi-ip"
     subnet_id                     = azurerm_subnet.muzi-sn[1].id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.muzi-pubip.id
   }
 }
 
